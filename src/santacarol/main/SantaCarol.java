@@ -4,6 +4,7 @@ import javax.sound.midi.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 
 public class SantaCarol{
 	
@@ -13,14 +14,13 @@ public class SantaCarol{
 	private myDrawPanel myPanel;
 	private JFrame frame = new JFrame("Santa's Carol");
 	private JButton button = new JButton("Waiting for song to finish");
-	
-	public static void main(String[] args) {
-		System.out.println("Ready to play music!"); // Signal user that the music player will start
-		SantaCarol sc = new SantaCarol(); // Create a new Santa Carol object to access the "play" method
-		sc.play(); // Play
+		
+	public SantaCarol() {
+		System.out.println("SantaCarol object created"); // Tell user a SantaCarol object has been created
 	}
 	
 	private void setupGui() {
+		
 		myPanel = new myDrawPanel(); // Create a myDrawPanel object
 		myPanel.setSize(600, 600);
 		
@@ -30,17 +30,23 @@ public class SantaCarol{
 		frame.getContentPane().add(BorderLayout.SOUTH, button);
 		frame.setVisible(true); // Make sure the frame is visible
 		frame.setResizable(false); // Make sure the frame is not resizable
+		
+		System.out.println("GUI Ready!"); // Signal user GUI is ready
 	}
 	
 	public void play() {
 		
-		// Set isPlaying to true
+		// Set isPlaying to true and reset the ticker
 		isPlaying = true;
+		tick = 0;
 		
 		try {
 			
 			// Add an action listener to the button
 			button.addActionListener(new myButtonListener());
+			
+			// Set button text
+			button.setText("Waiting for song to finish");
 			
 			// Create the gui
 			setupGui();
@@ -48,6 +54,7 @@ public class SantaCarol{
 			// Get and open the sequencer
 			Sequencer sequencer = MidiSystem.getSequencer();
 			sequencer.open();
+			System.out.println("Sequencer found and opened"); // Tell user sequencer was found and opened
 			
 			// Create conditions that controller listener will listen for and add the listener to the sequencer
 			int[] eventQuery = {47};
@@ -261,14 +268,17 @@ public class SantaCarol{
 			track.add(makeEvent(176, 2, 47, 248, 120)); // Beard
 			track.add(makeEvent(176, 2, 47, 258, 120)); // Hat
 			track.add(makeEvent(176, 2, 47, 278, 120)); // Hat Puff
-			track.add(makeEvent(176, 2, 47, 296, 120));
+			track.add(makeEvent(176, 2, 47, 341, 120));
+			System.out.println("Music loaded, now preparing to play"); // Signal user that music has been loaded into track
 	
 			// Let's play the music
-			sequencer.setSequence(seq);
-			sequencer.setTempoInBPM(160);
-			sequencer.start();
+			sequencer.setSequence(seq); //
+			sequencer.setTempoInBPM(160); // Set BPM to 160
+			sequencer.start(); // Start playing
+			System.out.println("Now playing"); // Signal user music is playing
 		} catch (Exception ex) {
 			// Catch and print the exception
+			System.out.println("Setup failed"); // Tell the user setup failed
 			ex.printStackTrace();
 		}
 		
@@ -288,7 +298,7 @@ public class SantaCarol{
 		}
 	}
 	
-	class myButtonListener implements ActionListener {
+	private class myButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == button && isPlaying == false) {
@@ -298,7 +308,7 @@ public class SantaCarol{
 		
 	}
 	
-	class myDrawPanel extends JPanel implements ControllerEventListener {
+	private class myDrawPanel extends JPanel implements ControllerEventListener {
 		
 		// Not needed I think but Eclipse
 		private static final long serialVersionUID = 1177792778672029685L;
@@ -327,16 +337,13 @@ public class SantaCarol{
 			
 			// Only execute if flag is true
 			if (flag) {
-				
+				System.out.println("Valid event found, something was drawn"); // Tell user there was a valid event and something was drawn
 				// Based on ticks(if we are on the nth beat, this happens)
 				if (tick == 0) {
 					
 					// Set the background to white on start
 					g2d.setPaint(Color.WHITE);
 					g2d.fillRect(0, 0, 600, 600);
-					
-					// Set button text
-					button.setText("Waiting for song to finish");
 					
 				} else if (tick == 1) {
 					
@@ -588,13 +595,15 @@ public class SantaCarol{
 					g2d.fillRect(215, 130, 170, 20);
 					g2d.fillOval(410, 50, 30, 30);
 					
-				} else if (tick == 23) {
+				} else if (tick == 24) {
 					
 					// Set button text
 					button.setText("Click to start again");
 					
 					// Set isPlaying back to false
 					isPlaying = false;
+					
+					System.out.println("Music finished, animation done, click to restart");
 					
 				}
 				
