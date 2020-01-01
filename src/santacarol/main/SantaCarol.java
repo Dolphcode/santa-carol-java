@@ -6,6 +6,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 
+/**
+ * 
+ * An awesome class for an application that draws Santa to the beat of Carol of the Bells
+ * Run the play(); method for the app to run
+ * 
+ * @author InfernoProgrammer123
+ * @Repo: https://github.com/InfernoProgrammer123/SantaCarol/
+ *
+ */
 public class SantaCarol extends JFrame{
 	
 	// Instance variables
