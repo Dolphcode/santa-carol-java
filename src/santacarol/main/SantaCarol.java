@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 
-public class SantaCarol{
+public class SantaCarol extends JFrame{
 	
 	// Instance variables
 	private int tick = 0;
@@ -14,6 +14,7 @@ public class SantaCarol{
 	private myDrawPanel myPanel;
 	private JFrame frame = new JFrame("Santa's Carol");
 	private JButton button = new JButton("Waiting for song to finish");
+	private ImageIcon icon;
 		
 	public SantaCarol() {
 		System.out.println("SantaCarol object created"); // Tell user a SantaCarol object has been created
@@ -24,12 +25,17 @@ public class SantaCarol{
 		myPanel = new myDrawPanel(); // Create a myDrawPanel object
 		myPanel.setSize(600, 600);
 		
-		frame.setSize(600, 620); // Set the size
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(BorderLayout.CENTER, myPanel);
-		frame.getContentPane().add(BorderLayout.SOUTH, button);
-		frame.setVisible(true); // Make sure the frame is visible
-		frame.setResizable(false); // Make sure the frame is not resizable
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				SantaCarol.class.
+				getResource("/santacarol/main/images/SantaClausIcon.png"))); // Set the app icon
+		
+		setSize(600, 620); // Set the size
+		setTitle("Santa's Carol"); // Set the title of the app
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().add(BorderLayout.CENTER, myPanel);
+		getContentPane().add(BorderLayout.SOUTH, button);
+		setVisible(true); // Make sure the frame is visible
+		setResizable(false); // Make sure the frame is not resizable
 		
 		System.out.println("GUI Ready!"); // Signal user GUI is ready
 	}
